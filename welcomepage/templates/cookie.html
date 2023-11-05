@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>用户名编辑页面</title>
+     <meta charset="utf-8">
+  <style>
+    #username-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    #username-input {
+      display: none;
+      margin-left: 10px;
+    }
+
+    .edit-mode #username-input {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="username-container">
+    <button onclick="toggleEdit()">编辑</button>
+    <span id="username-display">这是一个示例用户名</span>
+    <input type="text" id="username-input" value="这是一个示例用户名">
+  </div>
+
+  <script>
+    function toggleEdit() {
+      var usernameDisplay = document.getElementById('username-display');
+      var usernameInput = document.getElementById('username-input');
+      if (usernameDisplay.tagName === 'SPAN') {
+        usernameDisplay.tagName = 'INPUT';
+        usernameInput.style.display = 'none';
+        usernameDisplay.style.display = 'block';
+      } else {
+        usernameDisplay.tagName = 'SPAN';
+        usernameInput.style.display = 'block';
+        usernameDisplay.style.display = 'none';
+      }
+    }
+  </script>
+</body>
+</html>

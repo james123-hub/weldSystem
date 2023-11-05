@@ -1,0 +1,125 @@
+{% extends 'usernav.html' %}
+{% block content %}
+    <style>
+        .box {
+            width: 600px;
+            min-height: 100px;
+            margin: 100px auto 0 auto;
+            border: 1px solid #dddddd;
+            padding: 0 20px 20px 20px;
+        }
+
+        .box h2 {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+        .box div{
+            padding-bottom: 20px;
+        }
+    </style>
+    <div class="box">
+        <h2>个人信息</h2>
+        <form class="form-horizontal" action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="userName" class="col-sm-3 control-label">用户名</label>
+                <div class="col-sm-7">
+                    <p id="name" style="text-align: center"></p>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="用户名" style="display: none; margin-left: 600px">
+                    <span class="help-block" style="color: red">{{ errors.username }}</span>
+                    <span class="help-block" style="color: red">{{ info }}</span>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-primary btn-xs" onclick="toggleEdit()" id="edit">编辑</button>
+                     <button type="button" class="btn btn-primary btn-xs" onclick="toggleCancel()" id="cancel" style="display: none; margin-left: 600px">取消</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="sex" class="col-sm-3 control-label">性别</label>
+                <div class="col-sm-7" style="text-align: center">
+                    <label class="radio-inline">
+                        <input type="radio" name="inlineRadioOptions" id="male" value="0"> 男
+                    </label>
+                       <label class="radio-inline">
+                        <input type="radio" name="inlineRadioOptions" id="female" value="1"> 女
+                    </label>
+                    <span class="help-block" style="color: red">{{ errors.sex }}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="company" class="col-sm-3 control-label">公司</label>
+                <div class="col-sm-7">
+                    <input type="text" class="form-control" id="company" name="company" placeholder="公司名">
+                    <span class="help-block" style="color: red">{{ errors.company }}</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-4">
+                    <button type="submit" class="btn bg-primary">保存</button>
+                    <span class="help-block">{{ success }}</span>
+                </div>
+                <div class="col-sm-4" style="padding-top: 8px" >
+                    <a href="{% url 'home' %}">取消</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        const cookies = document.cookie.split(";");
+        console.log(cookies)
+        for (let cookie of cookies) {
+            console.log(cookie.trim());
+            cookie = cookie.trim();
+            if (cookie.startsWith("username=")) {
+                const value = cookie.substring("username=".length, cookie.length);
+                console.log(value);
+                document.getElementById("name").innerHTML = value;
+                document.getElementById("cookievalue").innerHTML = value;
+                break;
+            }
+            console.log("false")
+        }
+        function toggleEdit() {
+            console.log("进入");
+            var text = document.getElementById("username");
+            var button = document.getElementById("cancel");
+            var origintext = document.getElementById("name");
+            var originbutton =document.getElementById("edit");
+            console.log(text.style.display);
+            if(text.style.display=="none") {
+                text.style.display = "inline";
+                text.style.marginLeft = "0px";
+                button.style.display = "inline";
+                button.style.marginLeft = "0px";
+                origintext.style.display = "none";
+                originbutton.style.display = "none";
+                originbutton.style.marginLeft = "600px";
+                console.log(text.style);
+                console.log(button.style);
+            }
+        }
+        function toggleCancel() {
+            console.log("进入");
+            var text = document.getElementById("username");
+            var button = document.getElementById("cancel");
+            var origintext = document.getElementById("name");
+            var originbutton =document.getElementById("edit");
+            console.log(text.style.display);
+            if(originbutton.style.display=="none") {
+                text.style.display = "none";
+                text.style.marginLeft = "600px";
+                button.style.display = "none";
+                button.style.marginLeft = "600px";
+                origintext.style.display = "inline";
+                origintext.style.marginLeft = "100px";
+                origintext.style.textAlign = "center";
+                originbutton.style.display = "inline";
+                originbutton.style.marginLeft = "0px";
+                console.log(text.style);
+                console.log(button.style);
+                console.log(origintext.style.textAlign);
+                console.log(origintext.style.marginLeft);
+            }
+        }
+    </script>
+{% endblock %}
