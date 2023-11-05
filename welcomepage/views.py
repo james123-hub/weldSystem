@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import UserRegForm,UserDetailForm
+from .forms import UserRegForm,UserDetailForm,UserPwdEdit
 from .models import userInfo,userDetail
 from django.urls import reverse
 
@@ -14,7 +14,7 @@ def login(request):
         user = userInfo.objects.filter(username=username)
         if user:
             if user[0].password == password:
-                url = reverse('userdetail')
+                url = reverse('home')
                 response  = redirect(url)
                 response.set_cookie("username",username, 604800)
                 return response
@@ -26,7 +26,6 @@ def login(request):
             return render(request, 'login.html', {"userinfo": info})
     return render(request, 'login.html')
 
-    return render(request, 'login.html')
 def register(request):
     if request.method == "POST":
         form_obj = UserRegForm(request.POST)
@@ -62,16 +61,50 @@ def userDeatail(request):
         form_obj = UserDetailForm(request.POST)
         if form_obj.is_valid():
              username = request.COOKIES['username']
-             user = userInfo.objects.get(username = username)
-             userdetail = userDetail.objects.get(username = username)
+             user = userInfo.objects.filter(username = username)
+             userdetail = userDetail.objects.filter(username = username)
+             if len(userdetail) == 0:
+                 userdetail = userDetail()
+             else:
+                 userdetail = userdetail[0]
+             if len(user) == 0:
+                 user = userInfo()
+             else:
+                 user = user[0]
              newuserName = request.POST.get("username")
-             if len(newuserName) != 0 and :
-                 userDetail.username = newuserName
+             if len(newuserName) != 0 :
+                 userdetail.username = newuserName
                  user.username = newuserName
                  user.save()
-             userDetail.sex = request.POST.get("sex")
-
+             else:
+                 userdetail.username = username
+             userdetail.sex = request.POST.get("sex")
+             userdetail.company = request.POST.get("company")
+             userdetail.user = user
+             userdetail.save()
+             return redirect(reverse('logout'))
         else:
             errors = form_obj.errors
             return render(request, 'userdetail.html', {"errors": errors})
     return render(request, 'userdetail.html')
+def editPwd(request):
+    if request.method == 'POST':
+        form_obj = UserPwdEdit(request.POST)
+        if form_obj.is_valid():
+            username = request.POST.get("username")
+            user = userInfo.objects.filter(username= username)
+            if len(user) == 0:
+                usererror = '用户名不存在'
+                return render(request, 'editPwd.html',{"usererror": usererror})
+            user = user[0]
+            password = request.POST.get("password")
+            if user.password == password:
+                info = '密码与原密码一致'
+                return render(request, 'editPwd.html', {"info":info})
+            user.password = password
+            user.save()
+            return redirect(reverse('home'))
+        else:
+            errors = form_obj.errors
+            return render(request, 'editPwd.html', {"errors": errors})
+    return render(request, 'editPwd.html')

@@ -38,10 +38,10 @@
                 <label for="sex" class="col-sm-3 control-label">性别</label>
                 <div class="col-sm-7" style="text-align: center">
                     <label class="radio-inline">
-                        <input type="radio" name="inlineRadioOptions" id="male" value="0"> 男
+                        <input type="radio" name="sex" id="male" value="0"> 男
                     </label>
                        <label class="radio-inline">
-                        <input type="radio" name="inlineRadioOptions" id="female" value="1"> 女
+                        <input type="radio" name="sex" id="female" value="1"> 女
                     </label>
                     <span class="help-block" style="color: red">{{ errors.sex }}</span>
                 </div>
@@ -56,7 +56,6 @@
             <div class="form-group">
                 <div class="col-sm-offset-4 col-sm-4">
                     <button type="submit" class="btn bg-primary">保存</button>
-                    <span class="help-block">{{ success }}</span>
                 </div>
                 <div class="col-sm-4" style="padding-top: 8px" >
                     <a href="{% url 'home' %}">取消</a>

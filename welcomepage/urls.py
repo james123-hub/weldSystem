@@ -9,5 +9,6 @@ urlpatterns = [
     path('logout/', views.logout, name = 'logout'),
     path('cookie/', views.getCookie, name = 'cookie'),
     path('base/',views.getBase, name = 'base'),
-    path('userdetail/', views.userDeatail, name = 'userdetail')
+    path('userdetail/', views.userDeatail, name = 'userdetail'),
+    path('editPwd/', views.editPwd, name = 'editPwd')
 ]
