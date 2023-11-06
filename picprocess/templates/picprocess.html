@@ -1,0 +1,43 @@
+{% extends 'nav.html'%}
+{% block content%}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4" style=" height: 700px; border: 1px solid #dddddd;">
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="brightness">亮度：</label>
+                    <input type="range" id="brightness" class="form-range" min="-100" max="100" value="0">
+                    <span id="brightnessValue">0</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="contrast">对比度：</label>
+                    <input type="range" id="contrast" class="form-range" min="-100" max="100" value="0">
+                    <span id="contrastValue">0</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="saturation">饱和度：</label>
+                    <input type="range" id="saturation" class="form-range" min="-100" max="100" value="0">
+                    <span id="saturationValue">0</span>
+                </div>
+            </div>
+        </div>
+            <div class="col-md-8" style=" height: 700px; border: 1px solid #dddddd;">
+                {% if dataUrl%}
+                <img src="{{ latest_url }}" />
+                {% else %}
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="file" name="data">
+                    <button type="submit" class="btn btn-success">上传图片</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+    {% endblock%}

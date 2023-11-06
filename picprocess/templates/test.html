@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Value Sliders</title>
+  <link rel="stylesheet" href="../../static/bootstrap/css/bootstrap.min.css">
+  <script src="../../static/js/jquery.min.js"></script>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-6">
+        <label for="brightness">亮度：</label>
+        <input type="range" id="brightness" class="form-range" min="-100" max="100" value="0">
+        <span id="brightnessValue">0</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="contrast">对比度：</label>
+        <input type="range" id="contrast" class="form-range" min="-100" max="100" value="0">
+        <span id="contrastValue">0</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label for="saturation">饱和度：</label>
+        <input type="range" id="saturation" class="form-range" min="-100" max="100" value="0">
+        <span id="saturationValue">0</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cookies = document.cookie.split(";");
+    for (let cookie of cookies) {
+        cookie = cookie.trim();
+        if (cookie.startsWith("csrftoken=")) {
+            var csrftoken = cookie.substring("csrftoken=".length, cookie.length);
+            break;
+        }
+    }
+    const brightnessInput = $('#brightness');
+    const brightnessValue = $('#brightnessValue');
+    const contrastInput = $('#contrast');
+    const contrastValue = $('#contrastValue');
+    const saturationInput = $('#saturation');
+    const saturationValue = $('#saturationValue');
+
+    brightnessInput.on('input', () => {
+      brightnessValue.text(brightnessInput.val());
+    });
+
+    contrastInput.on('input', () => {
+      contrastValue.text(contrastInput.val());
+    });
+
+    saturationInput.on('input', () => {
+      saturationValue.text(saturationInput.val());
+    });
+    console.log(csrftoken)
+
+    // 监听鼠标松开事件，当滑块停止拖动时，将数值发送给服务器
+    $('input[type=range]').mouseup(() => {
+      const brightness = brightnessInput.val();
+      const contrast = contrastInput.val();
+      const saturation = saturationInput.val();
+
+      $.ajax({
+        type: 'POST',
+        url: '/process/edit/', // 后端处理程序的 URL
+        headers: {
+        "X-CSRFToken": csrftoken
+         },
+        data: { brightness, contrast, saturation }, // 发送的数据对象
+        success: (data) => {
+          console.log(data);
+        },
+        error: (xhr, status, error) => {
+          console.error(`AJAX Error: ${status} ${error}`);
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

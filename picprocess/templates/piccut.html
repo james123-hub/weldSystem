@@ -1,0 +1,47 @@
+<!-- 引入 Cropper.js 缩放、旋转和裁剪图片插件 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.js"></script>
+
+<div>
+    <!-- 显示待裁剪的图片 -->
+    <img id="image" src="D:\zoukuang1\weldSystem\media\1.jpg" alt="image">
+    <!-- 将裁剪后的图片数据存入隐藏的表单域 -->
+    <input type="hidden" id="imageData" name="imageData">
+</div>
+<div>
+    <!-- 点击按钮开始裁剪图片 -->
+    <button id="cropButton">裁剪图片</button>
+</div>
+
+<script>
+    // 获取待裁剪的图片元素
+    var image = document.getElementById('image');
+    // 创建 Cropper.js 实例，绑定到图片元素上
+    var cropper = new Cropper(image, {
+        aspectRatio: 1, // 裁剪比例为1:1
+        viewMode: 1 // 显示裁剪框外的画布部分
+    });
+    // 获取裁剪按钮元素
+    var cropButton = document.getElementById('cropButton');
+    // 绑定裁剪按钮的点击事件处理函数
+    cropButton.addEventListener('click', function() {
+        // 获取裁剪后的图片数据
+        var croppedData = cropper.getCroppedCanvas().toDataURL();
+        // 将数据存储到隐藏的表单域中
+        var imageData = document.getElementById('imageData');
+        imageData.value = croppedData;
+        // 发送 Ajax 请求，将图片上传到服务器进行保存
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/crop/image');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    // 裁剪并上传成功，更新页面上的图片元素
+                    image.src = response.url;
+                }
+            }
+        };
+        xhr.send(new FormData(document.getElementById('form')));
+    });
+</script>
