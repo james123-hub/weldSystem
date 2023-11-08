@@ -1,0 +1,33 @@
+{% extends 'nav.html' %}
+{% block content %}
+    <div class="container" style="padding: 20px">
+    <button type="button" class="btn btn-success">上传图片</button>
+    <button type="button" class="btn btn-danger">上传标注文件</button>
+    </div>
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>图片名称</th>
+                <th>存储路径</th>
+                <th>上传时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for data in datas %}
+            <tr>
+                <th scope="row">{{data.id}}</th>
+                <td>{{ data.dataname }}</td>
+                <td>{{ data.dataUrl }}</td>
+                <td>{{ data.upload_time }}</td>
+                <td>
+                    <a href="#">查看</a>
+                    <a href="#">下载</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

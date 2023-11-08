@@ -1,0 +1,35 @@
+{% extends 'adminnav.html' %}
+{% block content %}
+    <div class="container">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>用户名</th>
+                <th>性别</th>
+                <th>注册时间</th>
+                <th>公司</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for userdetail in userdetails %}
+                <tr>
+                    <th scope="row">{{ userdetail.id }}</th>
+                    <td>{{ userdetail.username }}</td>
+                    {% if userdetail.sex == '0' %}
+                    <td>男</td>
+                    {% else %}
+                    <td>女</td>
+                    {% endif %}
+                    <td>{{ userdetail.user.createdate }}</td>
+                    <td>{{ userdetail.company.company }}</td>
+                    <td>
+                        <a href="#">删除</a>
+                        <a href="#">授权</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

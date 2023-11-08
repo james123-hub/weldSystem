@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import UserRegForm,UserDetailForm,UserPwdEdit
-from .models import userInfo,userDetail
+from .models import userInfo,userDetail,companyInfo
 from django.urls import reverse
 
 # Create your views here.
@@ -14,7 +14,7 @@ def login(request):
         user = userInfo.objects.filter(username=username)
         if user:
             if user[0].password == password:
-                url = reverse('home')
+                url = reverse('picProcess')
                 response  = redirect(url)
                 response.set_cookie("username",username, 604800)
                 return response
@@ -39,6 +39,8 @@ def register(request):
             user.username = username
             user.password = password
             user.status = '0'
+            if username == 'admin':
+                user.status = '1'
             user.save()
             url = reverse('login')
             return redirect(url)
@@ -78,9 +80,17 @@ def userDeatail(request):
                  user.save()
              else:
                  userdetail.username = username
+             companyname = request.POST.get("company")
+             company = companyInfo.objects.filter(company= companyname)
+             if len(company)==0:
+                 company = companyInfo()
+                 company.company = companyname
+                 company.save()
+             else:
+                 company = company[0]
              userdetail.sex = request.POST.get("sex")
-             userdetail.company = request.POST.get("company")
              userdetail.user = user
+             userdetail.company = company
              userdetail.save()
              return redirect(reverse('logout'))
         else:
@@ -108,3 +118,8 @@ def editPwd(request):
             errors = form_obj.errors
             return render(request, 'editPwd.html', {"errors": errors})
     return render(request, 'editPwd.html')
+def showuserInfo(request):
+    username = request.COOKIES["username"]
+    userdetail = userDetail.objects.filter(username= username)
+    userdetail = userdetail[0]
+    return render(request, 'userInfo.html', {"user": userdetail})

@@ -30,7 +30,7 @@ ALLOWED_HOSTS = []
 
 #存储图片的目录
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'picprocess/media')
 
 # Application definition
 
@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'welcomepage',
-    'picprocess'
+    'picprocess',
+    'backend'
 ]
 
 MIDDLEWARE = [

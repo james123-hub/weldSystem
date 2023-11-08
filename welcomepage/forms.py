@@ -16,7 +16,7 @@ class UserRegForm(forms.Form):
 class UserDetailForm(forms.Form):
     username = forms.CharField(required = False,max_length=30, error_messages={'max_length': '用户名长度不超过30位'})
     sex = forms.CharField(error_messages={'required': '请选择性别'})
-    company = forms.CharField(required = False,max_length = 50, error_messages={'max_length': '密码长度不超过20位'})
+    company = forms.CharField(max_length = 50, error_messages={'required': '请填公司名','max_length': '公司名长度不超过20位'})
 
 class UserPwdEdit(forms.Form):
     username = forms.CharField(max_length=30, error_messages={'required': '用户姓名不能为空', 'max_length': '用户名长度不超过30位'})

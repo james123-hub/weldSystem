@@ -1,43 +1,158 @@
-{% extends 'nav.html'%}
-{% block content%}
+{% extends 'nav.html' %}
+{% block content %}
+    <style>
+        /* 设置最大高度和宽度 */
+        img {
+            max-width: 80%;
+            max-height: 80%;
+        }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-4" style=" height: 700px; border: 1px solid #dddddd;">
+        /* 设置图片居中 */
+        img {
+            display: block;
+            margin: 40px 40px 80px 80px;
+        }
+
+        div {
+            padding: 10px;
+        }
+    </style>
+    <div class="container">
+        <div class="col-md-4" style="height: 100vh; border: 1px solid #dddddd;">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-offset-1 col-md-6">
                     <label for="brightness">亮度：</label>
                     <input type="range" id="brightness" class="form-range" min="-100" max="100" value="0">
                     <span id="brightnessValue">0</span>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-offset-1 col-md-6">
                     <label for="contrast">对比度：</label>
                     <input type="range" id="contrast" class="form-range" min="-100" max="100" value="0">
                     <span id="contrastValue">0</span>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-offset-1 col-md-6">
                     <label for="saturation">饱和度：</label>
                     <input type="range" id="saturation" class="form-range" min="-100" max="100" value="0">
                     <span id="saturationValue">0</span>
                 </div>
             </div>
-        </div>
-            <div class="col-md-8" style=" height: 700px; border: 1px solid #dddddd;">
-                {% if dataUrl%}
-                <img src="{{ latest_url }}" />
-                {% else %}
-                <form method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <input type="file" name="data">
-                    <button type="submit" class="btn btn-success">上传图片</button>
-                </form>
-                {% endif %}
+            <div class="row">
+                <div class="col-md-offset-1 col-md-6">
+                    <button class="btn btn-primary" id="zoom-in">+</button>
+                    <button class="btn btn-primary" id="zoom-out">&ndash;</button>
+                </div>
             </div>
+             <div class="row">
+                <div class="col-md-offset-1 col-md-6">
+                    <button class="btn btn-primary btn-lg" id="piccut">图像裁剪</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-1 col-md-6">
+                    <button class="btn btn-primary btn-lg" id="piccut">去噪</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-1 col-md-6">
+                    <button class="btn btn-primary btn-lg" id="piccut">图像增强</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-offset-1 col-md-6">
+                    <button class="btn btn-primary btn-lg" id="piccut">图像保存</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8" style="height: 100vh; border: 1px solid #dddddd;">
+            {% if dataUrl %}
+                <img src="/media/1/2.jpg" style="margin: 50px 50px;"/>
+            {% else %}
+                <form method="POST" enctype="multipart/form-data" style="margin: 300px 300px">
+                    {% csrf_token %}
+                    <input type="file" name="data" style="padding-bottom: 20px">
+                    <button type="submit" class="btn btn-success">确认上传</button>
+                </form>
+            {% endif %}
         </div>
 
     </div>
-    {% endblock%}
+    <script>
+        const cookies = document.cookie.split(";");
+        for (let cookie of cookies) {
+            cookie = cookie.trim();
+            if (cookie.startsWith("csrftoken=")) {
+                var csrftoken = cookie.substring("csrftoken=".length, cookie.length);
+                break;
+            }
+        }
+        const brightnessInput = $('#brightness');
+        const brightnessValue = $('#brightnessValue');
+        const contrastInput = $('#contrast');
+        const contrastValue = $('#contrastValue');
+        const saturationInput = $('#saturation');
+        const saturationValue = $('#saturationValue');
+
+        brightnessInput.on('input', () => {
+            brightnessValue.text(brightnessInput.val());
+        });
+
+        contrastInput.on('input', () => {
+            contrastValue.text(contrastInput.val());
+        });
+
+        saturationInput.on('input', () => {
+            saturationValue.text(saturationInput.val());
+        });
+        console.log(csrftoken)
+
+        {#// 监听鼠标松开事件，当滑块停止拖动时，将数值发送给服务器#}
+        {#$('input[type=range]').mouseup(() => {#}
+        {#  const brightness = brightnessInput.val();#}
+        {#  const contrast = contrastInput.val();#}
+        {#  const saturation = saturationInput.val();#}
+        {##}
+        {#  $.ajax({#}
+        {#    type: 'POST',#}
+        {#    url: '/process/edit/', // 后端处理程序的 URL#}
+        {#    headers: {#}
+        {#    "X-CSRFToken": csrftoken#}
+        {#     },#}
+        {#    data: { brightness, contrast, saturation }, // 发送的数据对象#}
+        {#    success: (data) => {#}
+        {#      console.log(data);#}
+        {#    },#}
+        {#    error: (xhr, status, error) => {#}
+        {#      console.error(`AJAX Error: ${status} ${error}`);#}
+        {#    }#}
+        {#  });#}
+        {#})
+        ;
+        #}
+    </script>
+     <script>
+    $(document).ready(function() {
+      // 获取图片和按钮元素
+      const $img = $('#zoom-img');
+      const $zoomInBtn = $('#zoom-in');
+      const $zoomOutBtn = $('#zoom-out');
+
+      // 默认缩放级别为1
+      let zoomLevel = 1;
+
+      // 设置缩放级别和图片的transform样式
+      function setZoom(scale) {
+        zoomLevel *= scale;
+        $img.css('transform', `scale(${zoomLevel})`);
+      }
+
+      // 点击放大或缩小按钮时调用setZoom()函数
+      $zoomInBtn.click(() => setZoom(1.1));
+      $zoomOutBtn.click(() => setZoom(0.9));
+    });
+  </script>
+    <script src="../../static/js/jquery.min.js"></script>
+{% endblock %}

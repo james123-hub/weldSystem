@@ -10,5 +10,6 @@ urlpatterns = [
     path('cookie/', views.getCookie, name = 'cookie'),
     path('base/',views.getBase, name = 'base'),
     path('userdetail/', views.userDeatail, name = 'userdetail'),
-    path('editPwd/', views.editPwd, name = 'editPwd')
+    path('editPwd/', views.editPwd, name = 'editPwd'),
+    path('userInfo/', views.showuserInfo, name = 'userInfo')
 ]

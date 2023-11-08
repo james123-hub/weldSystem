@@ -1,10 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'usernav.html' %}
+{% block content %}
+    <style>
+        .box {
+            width: 600px;
+            min-height: 100px;
+            margin: 100px auto 0 auto;
+            border: 1px solid #dddddd;
+            padding: 0 20px 20px 20px;
+        }
 
-</body>
-</html>
+        .box h2 {
+            text-align: center;
+            padding-bottom: 20px;
+        }
+
+        .box div {
+            padding-bottom: 20px;
+        }
+    </style>
+    <div class="box">
+        <h2>个人信息</h2>
+        <form class="form-horizontal" action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username" class="col-sm-3 control-label">用户名</label>
+                <div class="col-sm-7" style="text-align: center">
+                    <a>{{ user.username }}</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="sex" class="col-sm-3 control-label">性别</label>
+                <div class="col-sm-7" style="text-align: center">
+                    {% if user.sex == '0' %}
+                        <a>男</a>
+                    {% else %}
+                       <a>女</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="company" class="col-sm-3 control-label">公司</label>
+                <div class="col-sm-7" style="text-align: center">
+                   <a>{{ user.company.company }}</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-5 col-sm-3" style="padding-top: 8px; text-align: center">
+                    <a href="{% url 'userdetail' %}">编辑</a>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
